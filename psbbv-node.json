@@ -1,0 +1,26 @@
+{
+  "manifestVersion": 1,
+  "id": "factory.spdw.psbbv.downloads",
+  "name": "PSBBV Downloads",
+  "version": "0.1.0",
+  "apiVersion": "1.0",
+  "description": "Cancellable transfer queues, safe destination handling and integrity verification for PSBBV.",
+  "category": "downloads",
+  "platforms": [
+    "psvita"
+  ],
+  "capabilities": [
+    "downloads.queue.manage",
+    "downloads.transfer.execute",
+    "downloads.integrity.verify"
+  ],
+  "permissions": [
+    "network.client",
+    "storage.private",
+    "storage.shared.read"
+  ],
+  "availability": "planned",
+  "runtime": {
+    "kind": "builtin"
+  }
+}
