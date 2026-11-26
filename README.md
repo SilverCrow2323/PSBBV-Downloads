@@ -37,4 +37,4 @@ State-machine tests, traversal/symlink tests, atomic-write tests, checksum misma
 
 ## Status
 
-Repository bootstrap and product boundary only. Planned features are not yet implemented. English UI/docs and SPDW Factory identity are required.
+Portable C transfer-job state machine and request-policy validator implemented and host-testable. The request validator enforces HTTPS-only endpoints, no embedded credentials/fragments, safe filenames, destination-root containment, bounded sizes and SHA-256 policy. Network I/O, atomic file staging, queue persistence and Vita UI remain pending. English UI/docs and SPDW Factory identity are required.
