@@ -15,6 +15,7 @@ static int allowed(psbbv_transfer_state from,psbbv_transfer_state to) {
 psbbv_transfer_result psbbv_transfer_transition(psbbv_transfer_job *job,psbbv_transfer_state next) {
  if(!job||next<PSBBV_TRANSFER_QUEUED||next>PSBBV_TRANSFER_CANCELLED) return PSBBV_TRANSFER_INVALID;
  if(!allowed(job->state,next)) return PSBBV_TRANSFER_BAD_TRANSITION;
+ if(next==PSBBV_TRANSFER_VERIFYING && job->expected_bytes && job->received_bytes!=job->expected_bytes) return PSBBV_TRANSFER_INCOMPLETE;
  job->state=next; return PSBBV_TRANSFER_OK;
 }
 psbbv_transfer_result psbbv_transfer_set_progress(psbbv_transfer_job *job,uint64_t bytes) {

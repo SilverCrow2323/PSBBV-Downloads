@@ -22,6 +22,12 @@ PSBBV Downloads owns download and transfer queues for PSBBV. It provides a share
 - Validate HTTPS certificates and hostnames; no downgrade or insecure fallback.
 - Do not redistribute copyrighted content or persist credentials in download URLs or logs.
 
+## Transfer completion guard milestone
+
+A transfer with a declared content length cannot enter `VERIFYING` until the received byte count matches that length. An incomplete transition returns `PSBBV_TRANSFER_INCOMPLETE` and leaves the job in `DOWNLOADING`, allowing the transport adapter to continue or fail explicitly. Unknown-length transfers (`expected_bytes == 0`) remain supported and still require a verification step before completion.
+
+Run the CMake host suite with `cmake -S . -B build && cmake --build build --parallel && ctest --test-dir build --output-on-failure`.
+
 ## Delivery order
 
 1. Define a portable transfer-job state machine and error taxonomy.
