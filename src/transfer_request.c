@@ -6,10 +6,6 @@
 static int terminated(const char *value, size_t capacity) {
     return value != NULL && memchr(value, '\0', capacity) != NULL;
 }
-static size_t bounded_length(const char *value, size_t capacity) {
-    const char *end = (const char *)memchr(value, '\0', capacity);
-    return end ? (size_t)(end - value) : capacity;
-}
 static int has_dot_segment(const char *path) {
     const char *cursor = path;
     while (*cursor) {
@@ -36,7 +32,8 @@ static int safe_filename(const char *name) {
         name[length - 1] == '.' || name[length - 1] == ' ') return 0;
     for (i = 0; i < length; ++i) {
         unsigned char c = (unsigned char)name[i];
-        if (!(isalnum(c) || c == '.' || c == '_' || c == '-')) return 0;
+        if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+              (c >= '0' && c <= '9') || c == '.' || c == '_' || c == '-')) return 0;
     }
     return 1;
 }
@@ -52,6 +49,7 @@ static int valid_sha256(const char *hash) {
 static psbbv_transfer_request_result validate_url(const char *url) {
     const char *authority, *end;
     size_t i, length = strlen(url), authority_length;
+    if (strchr(url, '\r') || strchr(url, '\n')) return PSBBV_REQUEST_URL_HOST;
     if (length < 9 || strncmp(url, "https://", 8) != 0) return PSBBV_REQUEST_URL_SCHEME;
     authority = url + 8;
     end = strpbrk(authority, "/?#");
@@ -74,8 +72,7 @@ psbbv_transfer_request_result psbbv_transfer_validate_request(
         !terminated(request->url, sizeof(request->url)) ||
         !terminated(request->filename, sizeof(request->filename)) ||
         !terminated(request->destination, sizeof(request->destination)) ||
-        !terminated(request->sha256, sizeof(request->sha256)) ||
-        !memchr(allowed_root, '\0', PSBBV_TRANSFER_PATH_CAP))
+        !terminated(request->sha256, sizeof(request->sha256)))
         return PSBBV_REQUEST_INVALID_ARGUMENT;
     if (!request->url[0] || !request->filename[0] || !request->destination[0])
         return PSBBV_REQUEST_INVALID_ARGUMENT;
@@ -95,7 +92,8 @@ psbbv_transfer_request_result psbbv_transfer_validate_request(
         strcmp(request->destination + root_length + 1, request->filename) != 0 ||
         has_dot_segment(request->destination) || strstr(request->destination, "//"))
         return PSBBV_REQUEST_DESTINATION;
-    if (!request->max_bytes || request->max_bytes > PSBBV_TRANSFER_HARD_LIMIT ||
+    if ((request->require_sha256 != 0 && request->require_sha256 != 1) ||
+        !request->max_bytes || request->max_bytes > PSBBV_TRANSFER_HARD_LIMIT ||
         (request->expected_bytes && request->expected_bytes > request->max_bytes))
         return PSBBV_REQUEST_SIZE_POLICY;
     if (request->require_sha256 && !valid_sha256(request->sha256))
