@@ -32,3 +32,8 @@ Remain at the current 0.1.0 / planned baseline until the portable model, Vita ad
 
 - Verified [Downloads node validation #46124458763](https://github.com/SilverCrow2323/PSBBV-Downloads/actions/runs/46124458763); transfer completion host tests passed in [run #45844581112](https://github.com/SilverCrow2323/PSBBV-Downloads/actions/runs/45844581112).
 - Remaining gate: integrate transfer lifecycle/progress with Core and test interrupted/resumed transfers on Vita storage.
+
+## Release readiness verification — 2026-11-28
+
+- Workflow evidence: https://github.com/SilverCrow2323/PSBBV-Downloads/actions/runs/46179983669.
+- The node-identity contract passed on `2abf4f5`. No real download, checksum verification against a remote source or interrupted-transfer recovery on Vita is implied.
