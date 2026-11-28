@@ -27,3 +27,8 @@ Manifest identity/schema pass; domain capabilities and permissions are least-pri
 
 ## Release target
 Remain at the current 0.1.0 / planned baseline until the portable model, Vita adapter and device recovery gates are complete.
+
+## Evening integration evidence — 2026-11-28
+
+- Verified [Downloads node validation #46124458763](https://github.com/SilverCrow2323/PSBBV-Downloads/actions/runs/46124458763); transfer completion host tests passed in [run #45844581112](https://github.com/SilverCrow2323/PSBBV-Downloads/actions/runs/45844581112).
+- Remaining gate: integrate transfer lifecycle/progress with Core and test interrupted/resumed transfers on Vita storage.
